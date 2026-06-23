@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize(
@@ -6,33 +7,24 @@ const sequelize = new Sequelize(
   process.env.DB_PASS,
   {
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT || 5432,
+    port: process.env.DB_PORT,
     dialect: "postgres",
-
-    // aman untuk development
     logging: false,
-
     dialectOptions: {
-      ssl: process.env.DB_SSL === "true"
-        ? { require: true, rejectUnauthorized: false }
-        : false,
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
-
-    timezone: "+07:00", // WIB
   }
 );
 
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log("✅ PostgreSQL connected");
-
-    // PENTING: jangan sync alter di production
-    // await sequelize.sync({ alter: true });
-
-  } catch (err) {
-    console.error("❌ DB connection error:", err.message);
-    process.exit(1);
+    console.log("✅ PostgreSQL connected successfully");
+  } catch (error) {
+    console.error("❌ DB connection error:", error);
   }
 };
 
