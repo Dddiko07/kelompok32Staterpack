@@ -40,17 +40,37 @@ const ScanResi = () => {
     audio.play().catch(() => {}); // Catch error jika browser memblokir autoplay
   };
 
-  // ===============================
-  // FETCH SCAN
-  // ===============================
   const fetchScan = useCallback(async (params = {}) => {
     setLoading(true);
+  
     try {
+      console.log("TOKEN:", localStorage.getItem("token"));
+  
       const res = await api.get("/resi/scan", { params });
+  
+      console.log("SUCCESS RESPONSE:", res);
+      console.log("SUCCESS DATA:", res.data);
+  
       setResi(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.error(err);
-      showAlert("Gagal mengambil data scan", "error");
+      console.error("ERROR FULL:", err);
+  
+      if (err.response) {
+        console.log("STATUS:", err.response.status);
+        console.log("HEADERS:", err.response.headers);
+        console.log("DATA:", err.response.data);
+      }
+  
+      if (err.request) {
+        console.log("REQUEST:", err.request);
+      }
+  
+      showAlert(
+        err?.response?.data?.message ||
+        err?.message ||
+        "Gagal mengambil data scan",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
