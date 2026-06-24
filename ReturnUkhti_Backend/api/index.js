@@ -1,12 +1,14 @@
-require("dns").setDefaultResultOrder("ipv4first");
 require("dotenv").config();
 
 const express = require("express");
-const { connectDB } = require("../src/config/db");
-const authRoutes = require("../src/routes/authRoutes");
+const cors = require("cors");
+
+const { connectDB } = require("./src/config/db");
+const authRoutes = require("./src/routes/authRoutes");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 connectDB();
@@ -17,4 +19,8 @@ app.get("/", (req, res) => {
   res.json({ message: "API Running" });
 });
 
-module.exports = app;
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
