@@ -10,7 +10,7 @@ const resiRoutes = require("./src/routes/resiRoutes");
 const app = express();
 
 // ===========================
-// CORS
+// CORS CONFIGURATION
 // ===========================
 app.use(
   cors({
@@ -19,32 +19,14 @@ app.use(
       "https://kelompok32-staterpack-zsmv.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    // Ditambahkan 'ngrok-skip-browser-warning' agar diizinkan oleh server backend kamu
+    allowedHeaders: ["Content-Type", "Authorization", "ngrok-skip-browser-warning"],
     credentials: true,
   })
 );
 
-// fallback CORS
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://kelompok32-staterpack-zsmv.vercel.app"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
+// Note: Blok "fallback CORS" manual sebelumnya telah dihapus karena fungsinya 
+// sudah sepenuhnya dicover dan dihandle dengan benar oleh middleware cors() di atas.
 
 // ===========================
 // MIDDLEWARE
