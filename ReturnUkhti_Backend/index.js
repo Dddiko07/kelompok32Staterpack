@@ -9,7 +9,16 @@ const resiRoutes = require("./src/routes/resiRoutes");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://kelompok32-staterpack-zsmv.vercel.app",
+    ],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 connectDB();
